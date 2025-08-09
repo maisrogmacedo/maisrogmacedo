@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>+Rogmacedo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Arimo&display=swap" rel="stylesheet">
+  <style>
+    /* Reset simples */
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Arimo',sans-serif;background:#fff;color:#111;line-height:1.45}
+
+    /* Cabeçalho - paleta: #dbdbdb (header/footer), rgb(0,208,130) links */
+    header{background:#dbdbdb;padding:22px 16px;text-align:center}
+    .site-title{font-size:2.6rem;font-weight:700;margin:0;color:#000}
+    .site-sub{font-size:0.9rem;color:#333;margin-top:6px}
+
+    /* Menu estilo Berliner (discreto) */
+    nav{background:#dbdbdb;border-top:1px solid rgba(0,0,0,0.04);border-bottom:1px solid rgba(0,0,0,0.04)}
+    .menu{max-width:1200px;margin:0 auto;padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+    .menu-left{display:flex;gap:12px;align-items:center}
+    .menu-left a{color:#000;text-decoration:none;font-weight:700;padding:6px 8px}
+    .menu-left a:hover{color:rgb(0,208,130)}
+
+    /* botão hamburguer para mobile */
+    .hamburger{display:none;background:transparent;border:0;font-size:1.3rem}
+
+    /* Layout principal: grid inspirado em Berliner */
+    main{max-width:1200px;margin:20px auto;padding:0 12px;display:grid;grid-template-columns:1fr 340px;gap:24px}
+
+    /* Manchete principal (hero) */
+    .manchete{background:#f3f3f3;padding:20px;border-left:8px solid rgb(0,208,130);min-height:260px;display:flex;flex-direction:column;justify-content:center}
+    .manchete .titulo{font-size:2.2rem;line-height:1.05;margin-bottom:12px;font-weight:800;color:#000;text-decoration:none}
+    .manchete .thumb{width:100%;max-height:320px;object-fit:cover;margin:10px 0;border:1px solid #e6e6e6}
+    .manchete .resumo{color:#333;font-size:1rem;max-width:100%;margin-top:6px}
+
+    /* Coluna direita com edições rápidas e listas */
+    .sidebar{display:flex;flex-direction:column;gap:18px}
+    .box{background:#f9f9f9;padding:14px;border-left:6px solid rgb(0,208,130);min-height:120px}
+    .box h3{margin:0 0 10px 0;font-size:1.05rem}
+    .lista-noticias{display:flex;flex-direction:column;gap:10px}
+    .lista-noticias a{color:#000;text-decoration:none;font-weight:700}
+    .lista-noticias a:hover{color:rgb(0,208,130)}
+    .nota{color:#555;font-size:0.9rem}
+
+    /* Área de artigos (coluna principal) com grid de blocos no estilo coluna de jornal */
+    .conteudo{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .card{background:#fff;padding:14px;border:1px solid #eee;min-height:140px}
+    .card h4{margin:0 0 8px 0;font-size:1.05rem}
+    .card a{color:#000;text-decoration:none;font-weight:700}
+    .card a:hover{color:rgb(0,208,130)}
+    .card p{color:#444;font-size:0.95rem}
+
+    /* Rodapé */
+    footer{background:#dbdbdb;padding:20px;margin-top:28px}
+    .footer-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap}
+    .footer-links a{text-decoration:none;color:#000;font-weight:700}
+    .footer-links a:hover{color:rgb(0,208,130)}
+    .copyright{color:#333;font-size:0.9rem}
+
+    /* pequenas otimizações visuais para leitura no desktop (Berliner-esque) */
+    .manchete .meta{color:#666;font-size:0.85rem;margin-top:6px}
+
+    /* Responsive: adaptar para mobile com uma coluna (manchete em topo) */
+  @media (max-width: 900px){
+      main{grid-template-columns:1fr;padding:0 10px}
+      .conteudo{grid-template-columns:1fr}
+      .manchete{min-height:200px;padding:16px}
+      .manchete .titulo{font-size:1.6rem}
+      .hamburger{display:inline-block}
+      .menu-left {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #dbdbdb;
+        padding: 10px 0;
+    }
+
+    }
+
+    @media (max-width:480px){
+      .manchete .titulo{font-size:1.4rem}
+      .manchete .resumo{font-size:0.95rem}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-title">+Rogmacedo</div>
+    <div class="site-sub"></div>
+  </header>
+
+  <nav>
+    <div class="menu">
+      <div class="menu-left" role="navigation" aria-label="Menu principal">
+        <a href="#">Início</a>
+        <a href="#">Política</a>
+        <a href="#">Economia</a>
+        <a href="#">Cultura</a>
+        <a href="#">Esportes</a>
+      </div>
+      <button class="hamburger" aria-expanded="false" aria-label="Abrir menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- coluna principal -->
+    <section aria-labelledby="manchete" class="manchete" id="manchete">
+      <span class="carregando-manchete" aria-live="polite">Carregando...</span>
+    </section>
+
+    <!-- coluna lateral direita -->
+    <aside class="sidebar">
+      <div class="box" id="box-ultimas">
+        <h3>Últimas</h3>
+        <div class="lista-noticias" id="ultimas-lista">
+          <span class="carregando-ultimas">Carregando...</span>
+        </div>
+      </div>
+
+      <div class="box" id="box-mais-lidas">
+        <h3>Mais Lidas</h3>
+        <div class="lista-noticias" id="maislidas-lista">
+          <span class="carregando-maislidas">Carregando...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- abaixo da manchete: grid de editorias no estilo Berliner -->
+    <section class="conteudo" aria-live="polite">
+      <article class="card" id="card-politica">
+        <h4>Política</h4>
+        <div class="card-list" id="politica-list">
+          <span class="carregando-politica">Carregando...</span>
+        </div>
+      </article>
+
+      <article class="card" id="card-cultura">
+        <h4>Cultura</h4>
+        <div class="card-list" id="cultura-list">
+          <span class="carregando-cultura">Carregando...</span>
+        </div>
+      </article>
+
+      <article class="card" id="card-esportes">
+        <h4>Esportes</h4>
+        <div class="card-list" id="esportes-list">
+          <span class="carregando-esportes">Carregando...</span>
+        </div>
+      </article>
+
+      <article class="card" id="card-economia">
+        <h4>Economia</h4>
+        <div class="card-list" id="economia-list">
+          <span class="carregando-economia">Carregando...</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="#">Sobre</a>
+        <a href="#">Contato</a>
+        <a href="#">Publicidade</a>
+        <a href="#">Trabalhe conosco</a>
+      </div>
+      <div class="copyright">© 2025 Jornal Berliner. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+    /* Helpers */
+    function stripHtml(html){
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html || '';
+      return tmp.textContent || tmp.innerText || '';
+    }
+    function truncate(text, n){
+      if(!text) return '';
+      return text.length > n ? text.slice(0,n).trim() + '…' : text;
+    }
+
+    // Feeds de exemplo (troque pelos seus)
+    const FEEDS = {
+      manchete: 'https://g1.globo.com/rss/g1/',
+      ultimas: 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+      maislidas: 'https://feeds.bbci.co.uk/news/rss.xml',
+      politica: 'https://g1.globo.com/rss/politica/',
+      cultura: 'https://g1.globo.com/rss/pop-arte/',
+      esportes: 'https://g1.globo.com/rss/esporte/',
+      economia: 'https://g1.globo.com/rss/economia/'
+    };
+
+    async function fetchJson(rssUrl){
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('fetch-fail');
+      return await res.json();
+    }
+
+    async function loadManchete(){
+      const container = document.getElementById('manchete');
+      const loading = container.querySelector('.carregando-manchete') || null;
+      if(loading) loading.style.display = 'inline';
+      try{
+        const data = await fetchJson(FEEDS.manchete);
+        if(!data.items || data.items.length === 0){ container.innerHTML = ''; return; }
+        const item = data.items[0];
+        const title = stripHtml(item.title);
+        const resumo = truncate(stripHtml(item.description), 170); // resumo curto
+        let html = `\n          <a class="titulo" href="${item.link}">${title}</a>`;
+        if(item.thumbnail) html += `\n          <img src="${item.thumbnail}" alt="${title}" class="thumb">`;
+        if(resumo) html += `\n          <div class="resumo">${resumo}</div>`;
+        container.innerHTML = html;
+      }catch(e){
+        container.innerHTML = ''; // silencioso
+      }
+    }
+
+    async function loadList(feedKey, containerId, max=4){
+      const container = document.getElementById(containerId);
+      const loading = container.querySelector('.carregando-' + containerId.split('-')[0]) || null;
+      if(loading) loading.style.display = 'inline';
+      try{
+        const data = await fetchJson(FEEDS[feedKey]);
+        if(!data.items || data.items.length === 0){ container.innerHTML = ''; return; }
+        container.innerHTML = '';
+        const items = data.items.slice(0,max);
+        items.forEach(it =>{
+          const title = stripHtml(it.title);
+          const el = document.createElement('div');
+          el.innerHTML = `<a href="${it.link}" class="titulo-mini">${title}</a>`;
+          container.appendChild(el);
+        });
+      }catch(e){ container.innerHTML = ''; }
+    }
+
+    async function loadCards(feedKey, containerId, max=4){
+      const container = document.getElementById(containerId + '-list');
+      const loading = container.querySelector('.carregando-' + containerId.split('-')[1]) || null;
+      if(loading) loading.style.display = 'inline';
+      try{
+        const data = await fetchJson(FEEDS[feedKey]);
+        if(!data.items || data.items.length === 0){ container.innerHTML = ''; return; }
+        container.innerHTML = '';
+        const items = data.items.slice(0,max);
+        items.forEach(it =>{
+          const title = stripHtml(it.title);
+          const resumo = truncate(stripHtml(it.description), 110);
+          const div = document.createElement('div');
+          div.innerHTML = `<a href="${it.link}">${title}</a><p class="nota">${resumo}</p>`;
+          container.appendChild(div);
+        });
+      }catch(e){ container.innerHTML = ''; }
+    }
+
+    /* Carrega tudo */
+    function carregarTudo(){
+      loadManchete();
+      loadList('ultimas','ultimas-list',4);
+      loadList('maislidas','maislidas-list',4);
+      loadCards('politica','card-politica',4);
+      loadCards('cultura','card-cultura',4);
+      loadCards('esportes','card-esportes',4);
+      loadCards('economia','card-economia',4);
+    }
+
+    carregarTudo();
+    // Atualiza a cada 5 minutos
+    setInterval(carregarTudo, 5*60*1000);
+
+    /* Menu hamburguer simples para mobile */
+    const hamburger = document.querySelector('.hamburger');
+    const menuLeft = document.querySelector('.menu-left');
+    hamburger.addEventListener('click', ()=>{
+      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!expanded));
+      menuLeft.style.display = expanded ? 'none' : 'flex';
+    });
+  </script>
+</body>
+</html>
