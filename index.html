@@ -17,10 +17,10 @@
 
     /* Menu estilo Berliner (discreto) */
     nav{background:#f2f2f2;border-top:1px solid rgba(0,0,0,0.04);border-bottom:1px solid rgba(0,0,0,0.04)}
-    .menu{max-width:1200px;margin:0 auto;padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+    .menu{max-width:1200px;margin:0 auto;padding:8px 12px;display:flex;justify-content:center;align-items:center}
     .menu-left{display:flex;gap:12px;align-items:center}
     .menu-left a{color:#000;text-decoration:none;font-weight:700;padding:6px 8px}
-    .menu-left a:hover{color:rgba(43,143,145,255)}
+    .menu-left a:hover{color:rgba(43,143,145,255); text-decoration: underline;}
 
     /* botão hamburguer para mobile */
     .hamburger{display:none;background:transparent;border:0;font-size:1.3rem}
@@ -53,11 +53,59 @@
 
     /* Rodapé */
     footer{background:#f2f2f2;padding:20px;margin-top:28px}
-    .footer-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .footer-inner{max-width:1200px;display:flex;flex-direction:column;align-items:flex-start; gap:8px}
     .footer-links{display:flex;gap:12px;flex-wrap:wrap}
-    .footer-links a{text-decoration:none;color:#000;font-weight:700}
-    .footer-links a:hover{color:rgb(0,208,130)}
-    .copyright{color:#333;font-size:0.9rem}
+    .footer-links a{text-decoration:none;color:rgba(43,143,145,255);font-weight:700}
+    .footer-links a:hover{color:rgba(43,143,145,255); text-decoration: underline;}
+    
+    .footer-separator {
+  width:100%;
+  border-top:1px solid #dbdbdb; /* linha cinza clara */
+  margin:15px 0; /* espaço superior e inferior */
+}
+    
+    
+    .copyright {
+  color:#000;
+  font-weight:700;
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* texto esquerda, botão direita */
+  align-items: center;
+}
+
+#toTop {
+  color: #333;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+#toTop:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .copyright {
+    color:#000;
+    font-weight:700;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  #toTop {
+    align-self: flex-start;
+  }
+}
+
+
+
 
     /* pequenas otimizações visuais para leitura no desktop (Berliner-esque) */
     .manchete .meta{color:#666;font-size:0.85rem;margin-top:6px}
@@ -68,9 +116,7 @@
       .conteudo{grid-template-columns:1fr}
       .manchete{min-height:200px;padding:16px}
       .manchete .titulo{font-size:1.6rem}
-      .hamburger{display: block;
-                 width: 100px;
-                 height: 100px;}
+      .hamburger{display: inline-block;}
       .menu-left {
         display: none;
         flex-direction: column;
@@ -84,6 +130,71 @@
       .manchete .titulo{font-size:1.4rem}
       .manchete .resumo{font-size:0.95rem}
     }
+    
+    
+    
+    
+    @media (max-width: 600px) {
+  .footer-links {
+    flex-direction:column; /* empilha os links no mobile */
+    gap:6px; /* espaço menor entre eles */
+  }
+}
+    
+    
+    
+    
+   /* container do dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown > a {
+  cursor: pointer;
+}
+
+/* submenu escondido por padrão */
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #f2f2f2;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+.submenu li a {
+  display: block;
+  padding: 8px 14px;
+  color: #000;
+  text-decoration: none;
+}
+
+.submenu li a:hover {
+  text-decoration: rgba(43,143,145,0.1); 
+  text-decoration: underline;;
+}
+
+/* quando hover no desktop */
+.dropdown:hover .submenu {
+  display: block;
+}
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   </style>
 </head>
 <body>
@@ -96,7 +207,17 @@
     <div class="menu">
       <div class="menu-left" role="navigation" aria-label="Menu principal">
         <a href="#">Início</a>
-        <a href="#">Política</a>
+        
+         
+      <div class="dropdown">
+        <a href="#">Política ▾</a>
+        <ul class="submenu">
+          <li><a href="#">Eleições</a></li>
+          <li><a href="#">Congresso</a></li>
+          <li><a href="#">Presidência</a></li>
+        </ul>
+      </div>
+        
         <a href="#">Economia</a>
         <a href="#">Cultura</a>
         <a href="#">Esportes</a>
@@ -161,6 +282,7 @@
   </main>
 
   <footer>
+  
     <div class="footer-inner">
       <div class="footer-links">
         <a href="#">Sobre</a>
@@ -168,8 +290,15 @@
         <a href="#">Publicidade</a>
         <a href="#">Trabalhe conosco</a>
       </div>
-      <div class="copyright">© 2025 Jornal Berliner. Todos os direitos reservados.</div>
+      
+      <div class="footer-separator"></div>
+      
+       <div class="copyright">
+      <span>© 2025 +Rogmacedo</span>
+      <button id="toTop" aria-label="Voltar ao topo" title="Voltar ao topo">To the top ↑</button>
     </div>
+  </div>
+  
   </footer>
 
   <script>
@@ -211,7 +340,7 @@
         if(!data.items || data.items.length === 0){ container.innerHTML = ''; return; }
         const item = data.items[0];
         const title = stripHtml(item.title);
-        const resumo = truncate(stripHtml(item.description), 170); // resumo curto
+        const resumo = truncate(stripHtml(item.description), 116); // resumo curto
         let html = `\n          <a class="titulo" href="${item.link}">${title}</a>`;
         if(item.thumbnail) html += `\n          <img src="${item.thumbnail}" alt="${title}" class="thumb">`;
         if(resumo) html += `\n          <div class="resumo">${resumo}</div>`;
@@ -274,13 +403,48 @@
     setInterval(carregarTudo, 5*60*1000);
 
     /* Menu hamburguer simples para mobile */
-    const hamburger = document.querySelector('.hamburger');
-    const menuLeft = document.querySelector('.menu-left');
-    hamburger.addEventListener('click', ()=>{
-      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-      hamburger.setAttribute('aria-expanded', String(!expanded));
-      menuLeft.style.display = expanded ? 'none' : 'flex';
+   document.addEventListener("DOMContentLoaded", function(){
+    const hamburger = document.querySelector(".hamburger");
+    const menuLeft = document.querySelector(".menu-left");
+
+    hamburger.addEventListener("click", function(){
+        const isOpen = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !isOpen);
+        hamburger.textContent = isOpen ? "☰" : "✖"; // muda entre ☰ e X
+        menuLeft.style.display = isOpen ? "none" : "flex"; // mostra/esconde menu
     });
+});
+
+
+
+
+
+
+
+document.querySelectorAll('.dropdown > a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    if (window.innerWidth <= 900) { // só mobile
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  });
+});
+
+
+
+
+
+
+
+const toTopBtn = document.getElementById('toTop');
+
+toTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
+
   </script>
 </body>
 </html>
