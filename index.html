@@ -6,6 +6,12 @@
   <title>+Rogmacedo</title>
   <link href="https://fonts.googleapis.com/css2?family=Arimo&display=swap" rel="stylesheet">
   <style>
+  
+  * {
+  transition: all 0.2s ease-in-out;
+}
+  
+  
     /* Reset simples */
     *{box-sizing:border-box}
     body{margin:0;font-family:'Arimo',sans-serif;background:#fff;color:#111;line-height:1.45}
@@ -29,19 +35,26 @@
     main{max-width:1200px;margin:20px auto;padding:0 12px;display:grid;grid-template-columns:1fr 340px;gap:24px}
 
     /* Manchete principal (hero) */
-    .manchete{background:#f3f3f3;padding:20px;border-left:8px solid rgb(0,208,130);min-height:260px;display:flex;flex-direction:column;justify-content:center}
-    .manchete .titulo{font-size:2.2rem;line-height:1.05;margin-bottom:12px;font-weight:800;color:#000;text-decoration:none}
+    .manchete{background:#f3f3f3;padding:20px;border-left:8px solid rgba(43,143,145,255);min-height:260px;display:flex;flex-direction:column;justify-content:center}
+    
+    .manchete .titulo{font-size:2.2rem;line-height:1.05;margin-bottom:12px;font-weight:800;color:#000;text-decoration:none;}
+    .manchete a:hover{font-size:2.2rem;line-height:1.05;margin-bottom:12px;font-weight:800;color:#000;text-decoration:underline;}
+    
     .manchete .thumb{width:100%;max-height:320px;object-fit:cover;margin:10px 0;border:1px solid #e6e6e6}
     .manchete .resumo{color:#333;font-size:1rem;max-width:100%;margin-top:6px}
 
     /* Coluna direita com edições rápidas e listas */
     .sidebar{display:flex;flex-direction:column;gap:18px}
-    .box{background:#f9f9f9;padding:14px;border-left:6px solid rgb(0,208,130);min-height:120px}
-    .box h3{margin:0 0 10px 0;font-size:1.05rem}
-    .lista-noticias{display:flex;flex-direction:column;gap:10px}
+    .box{background:#f9f9f9;padding:14px;border-left:6px solid rgba(43,143,145,255);min-height:120px}
+    .box h3{margin:0 0 20px 0;font-size:1.05rem}
+    .lista-noticias{display:flex;flex-direction:column;gap:20px}
     .lista-noticias a{color:#000;text-decoration:none;font-weight:700}
-    .lista-noticias a:hover{color:rgb(0,208,130)}
+    .lista-noticias a:hover{color:rgba(43,143,145,255);}
     .nota{color:#555;font-size:0.9rem}
+    
+
+
+
 
     /* Área de artigos (coluna principal) com grid de blocos no estilo coluna de jornal */
     .conteudo{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
@@ -53,34 +66,38 @@
 
     /* Rodapé */
     footer{background:#f2f2f2;padding:20px;margin-top:28px}
-    .footer-inner{max-width:1200px;display:flex;flex-direction:column;align-items:flex-start; gap:8px}
+    
+    .footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+    
     .footer-links{display:flex;gap:12px;flex-wrap:wrap}
     .footer-links a{text-decoration:none;color:rgba(43,143,145,255);font-weight:700}
     .footer-links a:hover{color:rgba(43,143,145,255); text-decoration: underline;}
     
     .footer-separator {
-  width:100%;
+  width:100%; 
   border-top:1px solid #dbdbdb; /* linha cinza clara */
   margin:15px 0; /* espaço superior e inferior */
 }
     
     
-    .copyright {
-  color:#000;
-  font-weight:700;
-  width: 100%;
+   .copyright {
   display: flex;
-  justify-content: space-between; /* texto esquerda, botão direita */
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
+  font-weight: 700;
+  color: #000;
 }
 
 #toTop {
-  color: #333;
-  font-size: 0.9rem;
+  background: none;
   border: none;
+  color: #333;
   cursor: pointer;
-  font-size: 0.9rem;
-  padding: 0;
 }
 
 #toTop:hover {
@@ -88,22 +105,12 @@
 }
 
 @media (max-width: 600px) {
-  .footer-links {
-    flex-direction: column;
-    gap: 6px;
-  }
   .copyright {
-    color:#000;
-    font-weight:700;
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
   }
-  #toTop {
-    align-self: flex-start;
-  }
 }
-
 
 
 
@@ -116,13 +123,31 @@
       .conteudo{grid-template-columns:1fr}
       .manchete{min-height:200px;padding:16px}
       .manchete .titulo{font-size:1.6rem}
-      .hamburger{display: inline-block;}
-      .menu-left {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        padding: 10px 0;
-    }
+      
+      
+      .menu {
+    flex-direction: column;  /* empilha botão e menu */
+    align-items: center;     /* centraliza tudo */
+  }
+  
+      .hamburger{display: inline-block;  cursor: pointer;}
+      
+      
+   .menu-left {
+  max-height: 0;        /* começa fechado */
+  overflow: hidden;     /* esconde o que passa do max-height */
+  transition: max-height 0.3s ease; /* anima max-height */
+  flex-direction: column;
+  width: 100%;
+  padding: 0 10px;
+}
+
+/* Quando abrir, aumenta max-height — deve ser um valor que cubra todo o conteúdo */
+.menu-left.show {
+  max-height: 500px; /* ajuste conforme o tamanho do seu menu */
+}
+
+
 
     }
 
@@ -205,6 +230,7 @@
 
   <nav>
     <div class="menu">
+          <button class="hamburger" aria-expanded="false" aria-label="Abrir menu">☰</button>
       <div class="menu-left" role="navigation" aria-label="Menu principal">
         <a href="#">Início</a>
         
@@ -222,7 +248,6 @@
         <a href="#">Cultura</a>
         <a href="#">Esportes</a>
       </div>
-      <button class="hamburger" aria-expanded="false" aria-label="Abrir menu">☰</button>
     </div>
   </nav>
 
@@ -233,17 +258,30 @@
     </section>
 
     <!-- coluna lateral direita -->
+    
     <aside class="sidebar">
       <div class="box" id="box-ultimas">
-        <h3>Últimas</h3>
-        <div class="lista-noticias" id="ultimas-lista">
-          <span class="carregando-ultimas">Carregando...</span>
+        <h3></h3>
+        <div class="lista-noticias" id="ultimas-list1">
+          <span class="carregando-ultimas01">Carregando...</span>
+          </div>
+          <br>
+        <div class="lista-noticias" id="ultimas-list2">
+          <span class="carregando-ultimas02"></span>
+          </div>
+          <br>
+          <div class="lista-noticias" id="ultimas-list3">
+          <span class="carregando-ultimas03"></span>
+          </div>
+          <br>
+          <div class="lista-noticias" id="ultimas-list4">
+          <span class="carregando-ultimas04"></span>
         </div>
       </div>
 
       <div class="box" id="box-mais-lidas">
-        <h3>Mais Lidas</h3>
-        <div class="lista-noticias" id="maislidas-lista">
+        <h3>+Rogmacedo</h3>
+        <div class="lista-noticias" id="maislidas-list">
           <span class="carregando-maislidas">Carregando...</span>
         </div>
       </div>
@@ -290,9 +328,11 @@
         <a href="#">Publicidade</a>
         <a href="#">Trabalhe conosco</a>
       </div>
+      </div>
       
       <div class="footer-separator"></div>
       
+       <div class="footer-inner">
        <div class="copyright">
       <span>© 2025 +Rogmacedo</span>
       <button id="toTop" aria-label="Voltar ao topo" title="Voltar ao topo">To the top ↑</button>
@@ -315,8 +355,11 @@
 
     // Feeds de exemplo (troque pelos seus)
     const FEEDS = {
-      manchete: 'https://g1.globo.com/rss/g1/',
-      ultimas: 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+      manchete: 'https://jovempan.com.br/feed',
+      ultimas01: 'https://gazetabrasil.com.br/feed',
+      ultimas02: 'https://www.poder360.com.br/feed',
+      ultimas03: 'https://www.conexaopolitica.com.br/feed',
+      ultimas04: 'https://ultimosegundo.ig.com.br/rss',
       maislidas: 'https://feeds.bbci.co.uk/news/rss.xml',
       politica: 'https://g1.globo.com/rss/politica/',
       cultura: 'https://g1.globo.com/rss/pop-arte/',
@@ -340,7 +383,7 @@
         if(!data.items || data.items.length === 0){ container.innerHTML = ''; return; }
         const item = data.items[0];
         const title = stripHtml(item.title);
-        const resumo = truncate(stripHtml(item.description), 116); // resumo curto
+        const resumo = truncate(stripHtml(item.description), 200); // resumo curto
         let html = `\n          <a class="titulo" href="${item.link}">${title}</a>`;
         if(item.thumbnail) html += `\n          <img src="${item.thumbnail}" alt="${title}" class="thumb">`;
         if(resumo) html += `\n          <div class="resumo">${resumo}</div>`;
@@ -390,7 +433,10 @@
     /* Carrega tudo */
     function carregarTudo(){
       loadManchete();
-      loadList('ultimas','ultimas-list',4);
+      loadList('ultimas01','ultimas-list1',1);
+      loadList('ultimas02','ultimas-list2',1);
+      loadList('ultimas03','ultimas-list3',1);
+      loadList('ultimas04','ultimas-list4',1);
       loadList('maislidas','maislidas-list',4);
       loadCards('politica','card-politica',4);
       loadCards('cultura','card-cultura',4);
@@ -411,7 +457,7 @@
         const isOpen = hamburger.getAttribute("aria-expanded") === "true";
         hamburger.setAttribute("aria-expanded", !isOpen);
         hamburger.textContent = isOpen ? "☰" : "✖"; // muda entre ☰ e X
-        menuLeft.style.display = isOpen ? "none" : "flex"; // mostra/esconde menu
+        menuLeft.classList.toggle("show"); // mostra/esconde menu
     });
 });
 
