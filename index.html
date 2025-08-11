@@ -34,6 +34,23 @@
     /* Layout principal: grid inspirado em Berliner */
     main{max-width:1200px;margin:20px auto;padding:0 12px;display:grid;grid-template-columns:1fr 340px;gap:24px}
 
+
+ /* Destaque */
+     .destaque a {
+  color: rgba(43,143,145,255);
+  text-decoration: none; /* tira o sublinhado normal */
+  font-weight: 700; /* para manter o negrito */
+}
+
+.destaque a:hover {
+  color: rgba(43,143,145,255);
+  text-decoration: underline;
+  font-weight: 800;
+}
+
+
+
+
     /* Manchete principal (hero) */
     .manchete{background:#f3f3f3;padding:20px;border-left:8px solid rgba(43,143,145,255);min-height:260px;display:flex;flex-direction:column;justify-content:center}
     
@@ -52,17 +69,50 @@
     .lista-noticias a:hover{color:rgba(43,143,145,255);}
     .nota{color:#555;font-size:0.9rem}
     
+    .maisrogmacedo-links a{text-decoration:none;color:rgba(43,143,145,255);font-weight:700}
+    .maisrogmacedo-links a:hover{color:rgba(43,143,145,255); text-decoration: underline;}
 
 
 
 
     /* Área de artigos (coluna principal) com grid de blocos no estilo coluna de jornal */
+    
     .conteudo{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-    .card{background:#fff;padding:14px;border:1px solid #eee;min-height:140px}
-    .card h4{margin:0 0 8px 0;font-size:1.05rem}
+    
+    /* Faz .conteudo ocupar as duas colunas do grid do main */
+main .conteudo {
+  grid-column: 1 / -1; /* inicia na primeira linha de grade e termina na última */
+  width: 100%;
+  display: grid; /* mantém comportamento de grid para os cards internos */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* colunas responsivas */
+  gap: 18px;
+}
+
+    
+    .card{background:#fff;padding:14px;border: none; 
+  border-left:1px solid #eee;min-height:140px}
+  
+  
+   .card h3{margin:0 0 8px 0;font-size:1.05rem; margin-bottom: 20px; text-decoration:none;color:rgba(43,143,145,255);}
+    .card h3:hover{color:rgba(43,143,145,255); text-decoration: underline;}
+    
+  
+  
+    .card h4{margin:0 0 8px 0;font-size:1.05rem; margin-bottom: 20px; text-decoration:none;color:rgba(43,143,145,255);}
+    .card h4:hover{color:rgba(43,143,145,255); text-decoration: underline;}
+    
+    
     .card a{color:#000;text-decoration:none;font-weight:700}
-    .card a:hover{color:rgb(0,208,130)}
+    .card a:hover{color:rgba(43,143,145,255)}
     .card p{color:#444;font-size:0.95rem}
+    
+    
+    
+
+    footer-meio{padding:20px;margin-top:28px}
+
+
+
 
     /* Rodapé */
     footer{background:#f2f2f2;padding:20px;margin-top:28px}
@@ -251,6 +301,16 @@
     </div>
   </nav>
 
+
+
+  <br><h1><center>
+   <div class="destaque" id="destaque-list">
+          <span class="carregando-destaque"></span>
+        </div>
+  </center></h1><br>
+
+
+
   <main>
     <!-- coluna principal -->
     <section aria-labelledby="manchete" class="manchete" id="manchete">
@@ -279,54 +339,78 @@
         </div>
       </div>
 
-      <div class="box" id="box-mais-lidas">
-        <h3>+Rogmacedo</h3>
-        <div class="lista-noticias" id="maislidas-list">
-          <span class="carregando-maislidas">Carregando...</span>
+      <div class="box" id="box-mais-rogmacedo">
+      <div class="maisrogmacedo-links">
+        <a href="https://maisrogmacedo.wordpress.com/posts/"><h3>+Rogmacedo</h3></a>
+        </div>
+        <div class="lista-noticias" id="maisrogmacedo-list">
+          <span class="carregando-maisrogmacedo">Carregando...</span>
         </div>
       </div>
     </aside>
+      </main>
 
-    <!-- abaixo da manchete: grid de editorias no estilo Berliner -->
+         <footer-meio>
+             <div class="footer-inner">
+       <div class="footer-separator"></div>
+              </div>
+        </footer-meio>
+
+ <!-- abaixo da manchete: grid de editorias no estilo Berliner -->
+    
+          <main>
+
     <section class="conteudo" aria-live="polite">
+    
       <article class="card" id="card-politica">
-        <h4>Política</h4>
+      <a href="https://www.noticiasaominuto.com.br/politica">
+        <h3>Política</h3>
+        </a>
         <div class="card-list" id="politica-list">
           <span class="carregando-politica">Carregando...</span>
         </div>
       </article>
 
-      <article class="card" id="card-cultura">
-        <h4>Cultura</h4>
-        <div class="card-list" id="cultura-list">
-          <span class="carregando-cultura">Carregando...</span>
-        </div>
-      </article>
-
-      <article class="card" id="card-esportes">
-        <h4>Esportes</h4>
+       <article class="card" id="card-esportes">
+          <a href="https://www.noticiasaominuto.com.br/esporte">
+        <h3>Esportes</h3>
+        </a>
         <div class="card-list" id="esportes-list">
           <span class="carregando-esportes">Carregando...</span>
         </div>
       </article>
 
-      <article class="card" id="card-economia">
-        <h4>Economia</h4>
-        <div class="card-list" id="economia-list">
-          <span class="carregando-economia">Carregando...</span>
+      <article class="card" id="card-mundo">
+          <a href="https://www.noticiasaominuto.com/mundo">
+        <h3>Mundo</h3>
+        </a>
+        <div class="card-list" id="mundo-list">
+          <span class="carregando-mundo">Carregando...</span>
         </div>
+          <a href="https://maisrogmacedo.wordpress.com/mundo/">
+        <h4>+Mundo</h4>
+        </a>
       </article>
+      
     </section>
-  </main>
+          </main>
+
+    <br>
+    
 
   <footer>
   
     <div class="footer-inner">
       <div class="footer-links">
-        <a href="#">Sobre</a>
-        <a href="#">Contato</a>
-        <a href="#">Publicidade</a>
-        <a href="#">Trabalhe conosco</a>
+      
+        <a href="https://www.facebook.com/rogmacedo">Facebook</a>
+        <a href="https://www.threads.net/@rogmacedo">Threads</a>
+        <a href="https://maisrogmacedo.wordpress.com/twitter">Twitter/X</a>
+        <a href="https://maisrogmacedo.wordpress.com/youtube/">YouTube</a>
+        <a href="https://ralphafm.blogspot.com.br/">Alpha FM</a>
+        <a href="https://rkiis.blogspot.com.br/">KIIS FM</a>
+        <a href="https://rdmpb.blogspot.com/">Rádio MPB</a>
+
       </div>
       </div>
       
@@ -360,11 +444,11 @@
       ultimas02: 'https://www.poder360.com.br/feed',
       ultimas03: 'https://www.conexaopolitica.com.br/feed',
       ultimas04: 'https://ultimosegundo.ig.com.br/rss',
-      maislidas: 'https://feeds.bbci.co.uk/news/rss.xml',
-      politica: 'https://g1.globo.com/rss/politica/',
-      cultura: 'https://g1.globo.com/rss/pop-arte/',
-      esportes: 'https://g1.globo.com/rss/esporte/',
-      economia: 'https://g1.globo.com/rss/economia/'
+      maisrogmacedo: 'https://maisrogmacedo.wordpress.com/feed',
+      politica: 'https://www.noticiasaominuto.com.br/rss/politica',
+      esportes: 'https://www.noticiasaominuto.com.br/rss/esporte', 
+      mundo: 'https://www.noticiasaominuto.com/rss/mundo',
+      destaque: 'https://maisrogmacedo.wordpress.com/tag/destaque/feed',
     };
 
     async function fetchJson(rssUrl){
@@ -422,9 +506,9 @@
         const items = data.items.slice(0,max);
         items.forEach(it =>{
           const title = stripHtml(it.title);
-          const resumo = truncate(stripHtml(it.description), 110);
+          const resumo = truncate(stripHtml(it.description), 0);
           const div = document.createElement('div');
-          div.innerHTML = `<a href="${it.link}">${title}</a><p class="nota">${resumo}</p>`;
+          div.innerHTML = `<a href="${it.link}">${title}</a><p class="nota"></p>`;
           container.appendChild(div);
         });
       }catch(e){ container.innerHTML = ''; }
@@ -437,11 +521,12 @@
       loadList('ultimas02','ultimas-list2',1);
       loadList('ultimas03','ultimas-list3',1);
       loadList('ultimas04','ultimas-list4',1);
-      loadList('maislidas','maislidas-list',4);
-      loadCards('politica','card-politica',4);
-      loadCards('cultura','card-cultura',4);
-      loadCards('esportes','card-esportes',4);
-      loadCards('economia','card-economia',4);
+      loadList('maisrogmacedo','maisrogmacedo-list',4);
+      loadCards('politica','politica',4);
+      loadCards('esportes','esportes',4);
+      loadCards('mundo','mundo',4);
+      loadCards('destaque','destaque',1);
+
     }
 
     carregarTudo();
