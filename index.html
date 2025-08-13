@@ -171,6 +171,9 @@ main .conteudo {
 
     /* pequenas otimizações visuais para leitura no desktop (Berliner-esque) */
     .manchete .meta{color:#666;font-size:0.85rem;margin-top:6px}
+    
+    
+    
 
     /* Responsive: adaptar para mobile com uma coluna (manchete em topo) */
   @media (max-width: 900px){
@@ -287,6 +290,76 @@ white-space: nowrap;
 
 /* Submenu no mobile */
 @media (max-width: 900px) {
+
+
+
+
+  /* ======= Ajustes específicos para o menu mobile ======= */
+
+/* Garante que cada item (link simples e dropdown) ocupe toda a largura */
+.menu-left, 
+.menu-left > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Torna todos os links do menu (incluindo o link do dropdown) blocos com o mesmo padding */
+.menu-left > a,
+.menu-left > .dropdown > a {
+  display: block;          /* ocupa a linha inteira */
+  width: 100%;
+  padding: 12px 14px;      /* mesmo espaçamento vertical/horizontal para todos */
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.2;        /* mantém altura consistente */
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid #dbdbdb; /* opcional: separador visual uniforme */
+}
+
+/* Remove padding/margens do container do dropdown para não criar espaços extras */
+.menu-left > .dropdown {
+  padding: 0;
+  margin: 0;
+}
+
+/* Submenu em mobile: remove padding que pode criar espaço; controlar max-height */
+.menu-left .submenu {
+  padding: 0;              /* IMPORTANT: evita "ar extra" do submenu quando fechado */
+  margin: 0;
+  max-height: 0;           /* fechado por padrão */
+  overflow: hidden;
+  transition: max-height 0.45s ease;
+  list-style: none;
+}
+
+/* Quando aberto (sua classe .open) define altura grande o suficiente */
+.menu-left .submenu.open {
+  max-height: 500px;       /* valor suficiente para o conteúdo — ajuste se necessário */
+}
+
+/* Opcional: estiliza os itens do submenu para ficar igual ao resto do menu */
+.menu-left .submenu li a {
+  display: block;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+
+.menu-left > a:hover,
+.menu-left > .dropdown > a:hover {
+  color:rgba(43,143,145,255); text-decoration: underline;
+}
+
+
+.menu-left > a:last-child,
+  .menu-left > .dropdown:last-child > a {
+    border-bottom: none;
+  }
+
+
+
   .submenu {
     position: static !important;
     border: none;
@@ -333,6 +406,11 @@ white-space: nowrap;
     color: rgba(43,143,145,1);
     text-decoration: underline;
   }
+  
+  .menu-left .submenu li a {
+  font-weight: normal !important;
+}
+
 }
 
 
