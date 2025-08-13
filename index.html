@@ -604,12 +604,51 @@ white-space: nowrap;
       destaque: 'https://maisrogmacedo.wordpress.com/tag/destaque/feed',
     };
 
+
+
+    /*  
     async function fetchJson(rssUrl){
       const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
       const res = await fetch(url);
       if(!res.ok) throw new Error('fetch-fail');
       return await res.json();
     }
+    */
+      
+
+      async function fetchJson(rssUrl) {
+  // Primeiro tenta rss2json.com
+  try {
+    let url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('rss2json fail');
+    const data = await res.json();
+    return data; // já tem data.items
+  } catch (e) {
+    console.warn('rss2json falhou, tentando feedrapp...');
+    // Se falhar, tenta feedrapp.info
+    try {
+      let url = `https://feedrapp.info/api/v1/rss?rss_url=${encodeURIComponent(rssUrl)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('feedrapp fail');
+      const data = await res.json();
+      return {
+        items: data.entries || [], // feedrapp usa entries
+      };
+    } catch (err) {
+      console.error('Ambos os serviços falharam:', err);
+      return { items: [] }; // fallback vazio
+    }
+  }
+}
+
+      
+
+
+
+
+
+      
 
     async function loadManchete(){
       const container = document.getElementById('manchete');
