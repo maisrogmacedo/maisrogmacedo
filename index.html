@@ -894,6 +894,8 @@ async function loadList(feedKey, containerId, max=4){
   }
 }
 
+
+  /*      
 async function loadCards(feedKey, containerId, max=4){
   const container = document.getElementById(containerId + '-list');
   const loading = container.querySelector('.carregando-' + containerId.split('-')[1]) || null;
@@ -914,7 +916,44 @@ async function loadCards(feedKey, containerId, max=4){
     console.warn(e); // mantém conteúdo
   }
 }
+*/
+        
 
+async function loadCards(feedKey, containerId, max=4){
+  const container = document.getElementById(containerId + '-list');
+  const loading = container.querySelector('.carregando-' + containerId.split('-')[1]) || null;
+  if(loading) loading.style.display = 'inline';
+  try{
+    const data = await fetchJson(FEEDS[feedKey]);
+
+    // Se não veio dado nenhum
+    if(!data) {
+      // Se for o feed destaque → limpa
+      if(feedKey === 'destaque') {
+        container.innerHTML = '';
+      }
+      return; // mantém conteúdo dos outros
+    }
+
+    // Se veio, atualiza normalmente
+    container.innerHTML = '';
+    const items = data.items.slice(0,max);
+    items.forEach(it =>{
+      const title = stripHtml(it.title);
+      const resumo = truncate(stripHtml(it.description), 0);
+      const div = document.createElement('div');
+      div.innerHTML = `<a href="${it.link}">${title}</a><p class="nota"></p>`;
+      container.appendChild(div);
+    });
+  }catch(e){
+    console.warn(e);
+  }
+}
+
+
+
+
+        
 /* Carrega tudo */
 function carregarTudo(){
   loadManchete();
