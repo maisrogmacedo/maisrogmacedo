@@ -1,128 +1,120 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>+Rogmacedo</title>
+<link rel="icon" href="https://github.com/maisrogmacedo/maisrogmacedo/raw/refs/heads/main/icon.ico" type="image/x-icon">
+<style>
+  body {
+    font-family:'Arimo',sans-serif;
+    background:#fff;
+    color:#111;
+    font-weight:normal;
+    margin:0;
+  }
 
-    <link rel="icon" href="https://github.com/maisrogmacedo/maisrogmacedo/raw/refs/heads/main/icon.ico" type="image/x-icon">
+  /* Iframe fixo e fullscreen */
+  #iframeContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 9999;
+    display: none;
+  }
 
-    
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>+Rogmacedo</title>
-  <style>
-  
-   body{font-family:'Arimo',sans-serif;background:#fff;color:#111; font-weight:normal;}
-  
-    /* Estilo do iframe container */
-    #iframeContainer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      z-index: 9999;
-      display: none;
-    }
+  /* Overlay de loading */
+  #loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;      /* coloca lado a lado */
+    gap: 15px;                /* distância entre a roda e o texto */
+    z-index: 10000;
+  }
 
+  /* Spinner estilo Google com cor personalizada */
+  .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid rgba(0,0,0,0.05);
+    border-top: 5px solid rgba(43,143,145,1);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
 
-    
-    
-    
-    
-    
-    /* Tela de loading */
-#loadingOverlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(255,255,255,0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  z-index: 9999;
-  gap: 15px; /* espaço entre a roda e o texto */
-}
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-/* Spinner com cor personalizada */
-.loader {
-  width: 48px;
-  height: 48px;
-  border: 5px solid rgba(0,0,0,0.04);        /* cor clara da borda */
-  border-top: 5px solid rgba(43,143,145,1);       /* cor que você pediu */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+  /* Texto “Carregando” */
+  .loading-text {
+    font-family:'Arimo',sans-serif;
+    color:#111;
+    font-weight:normal;
+    font-size: 20px;
+  }
 
-/* Animação de rotação */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-    
-    
-    
-  </style>
+  /* Responsivo */
+  @media(max-width:600px){
+    .loader { width:36px; height:36px; border-width:4px; }
+    .loading-text { font-size:16px; }
+  }
+</style>
 </head>
 <body>
 
-
-<div id="loadingOverlay"><div class="loader"></div>Carregando...</div>
-
+<div id="loadingOverlay">
+  <div class="loader"></div>
+  <span class="loading-text">Carregando...</span>
+</div>
 
 <iframe id="iframeContainer" src=""></iframe>
 
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
-
-  let initialReloads = 0; // contador para recarregar 2 vezes no início
   const targetURL = "https://maisrogmacedo.wordpress.com/";
+  let initialReloads = 0; // contador de recargas iniciais
 
   function loadIframe() {
+    // Mostra loading e esconde iframe
     loading.style.display = 'flex';
     iframe.style.display = 'none';
     iframe.src = targetURL;
 
     iframe.onload = () => {
+      // Mostra iframe e esconde loading
       loading.style.display = 'none';
       iframe.style.display = 'block';
 
-      // Se ainda não fez as 2 recargas iniciais
-      if (initialReloads < 1) {
+      // Recarga inicial extra (2 vezes no total)
+      if(initialReloads < 1){
         initialReloads++;
         console.log("Recarga inicial extra:", initialReloads);
-        setTimeout(() => {
-          loadIframe(); // recarrega de novo
-        }, 1000); // espera 1s antes de recarregar
+        setTimeout(() => loadIframe(), 2000);
       }
     };
 
     iframe.onerror = () => {
       console.error("Erro ao carregar a página, tentando novamente...");
-      setTimeout(loadIframe, 3000);
+      setTimeout(loadIframe, 3000); // tenta recarregar após 3s
     };
   }
 
   loadIframe();
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
-// Simulação: some após 3s
-setTimeout(() => {
-  document.getElementById('loadingOverlay').style.display = 'none';
-}, 3000);
-
-  
-  
-  
   
 </script>
 
