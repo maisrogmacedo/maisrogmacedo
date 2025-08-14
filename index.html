@@ -578,7 +578,8 @@ white-space: nowrap;
   
   </footer>
 
-  <script>
+    <!--
+  <script> 
     /* Helpers */
     function stripHtml(html){
       const tmp = document.createElement('div');
@@ -736,6 +737,150 @@ async function fetchJson(rssUrl) {
     // Atualiza a cada  minutos
     setInterval(carregarTudo, 2*60*1000);
 
+-->
+    <script>
+/* Helpers */
+function stripHtml(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function truncate(text, n){
+  if(!text) return '';
+  return text.length > n ? text.slice(0,n).trim() + '…' : text;
+}
+
+// Feeds de exemplo
+const FEEDS = {
+  manchete: 'https://jovempan.com.br/feed',
+  ultimas01: 'https://gazetabrasil.com.br/feed',
+  ultimas02: 'https://www.poder360.com.br/feed',
+  ultimas03: 'https://www.conexaopolitica.com.br/feed',
+  ultimas04: 'https://ultimosegundo.ig.com.br/rss',
+  maisrogmacedo: 'https://maisrogmacedo.wordpress.com/feed',
+  politica: 'https://www.noticiasaominuto.com.br/rss/politica',
+  esportes: 'https://www.noticiasaominuto.com.br/rss/esporte', 
+  mundo: 'https://www.noticiasaominuto.com/rss/mundo',
+  destaque: 'https://maisrogmacedo.wordpress.com/tag/destaque/feed',
+};
+
+let ultimoTituloPorFeed = {};
+
+async function fetchJson(rssUrl) {
+  const apis = [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`,
+    `https://feedrapp.info/api/v1/rss?rss_url=${encodeURIComponent(rssUrl)}`
+  ];
+
+  for (let apiUrl of apis) {
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error(`Falha na API: ${apiUrl}`);
+      const data = await res.json();
+
+      // Normaliza o formato
+      const items = data.items || data.entries || [];
+      if (items.length > 0) {
+        const tituloNovo = items[0].title;
+        if (ultimoTituloPorFeed[rssUrl] !== tituloNovo) {
+          ultimoTituloPorFeed[rssUrl] = tituloNovo;
+          return { items }; // notícia nova → atualiza
+        } else {
+          console.log(`Sem novidades para ${rssUrl}`);
+          return null; // mantém o que já está
+        }
+      }
+    } catch (err) {
+      console.warn(`Erro ao tentar ${apiUrl}`, err);
+    }
+  }
+
+  return null; // mantém conteúdo se nenhuma API respondeu
+}
+
+/* Funções de carregamento */
+async function loadManchete(){
+  const container = document.getElementById('manchete');
+  const loading = container.querySelector('.carregando-manchete') || null;
+  if(loading) loading.style.display = 'inline';
+  try{
+    const data = await fetchJson(FEEDS.manchete);
+    if(!data) return; // mantém conteúdo
+    const item = data.items[0];
+    const title = stripHtml(item.title);
+    const resumo = truncate(stripHtml(item.description), 200);
+    let html = `<a class="titulo" href="${item.link}">${title}</a>`;
+    if(item.thumbnail) html += `<img src="${item.thumbnail}" alt="${title}" class="thumb">`;
+    if(resumo) html += `<div class="resumo">${resumo}</div>`;
+    container.innerHTML = html;
+  }catch(e){
+    console.warn(e); // mantém conteúdo
+  }
+}
+
+async function loadList(feedKey, containerId, max=4){
+  const container = document.getElementById(containerId);
+  const loading = container.querySelector('.carregando-' + containerId.split('-')[0]) || null;
+  if(loading) loading.style.display = 'inline';
+  try{
+    const data = await fetchJson(FEEDS[feedKey]);
+    if(!data) return; // mantém conteúdo
+    container.innerHTML = '';
+    const items = data.items.slice(0,max);
+    items.forEach(it =>{
+      const title = stripHtml(it.title);
+      const el = document.createElement('div');
+      el.innerHTML = `<a href="${it.link}" class="titulo-mini">${title}</a>`;
+      container.appendChild(el);
+    });
+  }catch(e){
+    console.warn(e); // mantém conteúdo
+  }
+}
+
+async function loadCards(feedKey, containerId, max=4){
+  const container = document.getElementById(containerId + '-list');
+  const loading = container.querySelector('.carregando-' + containerId.split('-')[1]) || null;
+  if(loading) loading.style.display = 'inline';
+  try{
+    const data = await fetchJson(FEEDS[feedKey]);
+    if(!data) return; // mantém conteúdo
+    container.innerHTML = '';
+    const items = data.items.slice(0,max);
+    items.forEach(it =>{
+      const title = stripHtml(it.title);
+      const resumo = truncate(stripHtml(it.description), 0);
+      const div = document.createElement('div');
+      div.innerHTML = `<a href="${it.link}">${title}</a><p class="nota"></p>`;
+      container.appendChild(div);
+    });
+  }catch(e){
+    console.warn(e); // mantém conteúdo
+  }
+}
+
+/* Carrega tudo */
+function carregarTudo(){
+  loadManchete();
+  loadList('ultimas01','ultimas-list1',1);
+  loadList('ultimas02','ultimas-list2',1);
+  loadList('ultimas03','ultimas-list3',1);
+  loadList('ultimas04','ultimas-list4',1);
+  loadList('maisrogmacedo','maisrogmacedo-list',4);
+  loadCards('politica','politica',4);
+  loadCards('esportes','esportes',4);
+  loadCards('mundo','mundo',4);
+  loadCards('destaque','destaque',1);
+}
+
+carregarTudo();
+// Atualiza a cada 2 minutos
+setInterval(carregarTudo, 2*60*1000);
+
+
+
+    
     /* Menu hamburguer simples para mobile */
    document.addEventListener("DOMContentLoaded", function(){
     const hamburger = document.querySelector(".hamburger");
