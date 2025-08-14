@@ -919,23 +919,25 @@ async function loadCards(feedKey, containerId, max=4){
 */
         
 
+
 async function loadCards(feedKey, containerId, max=4){
   const container = document.getElementById(containerId + '-list');
   const loading = container.querySelector('.carregando-' + containerId.split('-')[1]) || null;
   if(loading) loading.style.display = 'inline';
+
   try{
     const data = await fetchJson(FEEDS[feedKey]);
 
-    // Se não veio dado nenhum
-    if(!data) {
-      // Se for o feed destaque → limpa
-      if(feedKey === 'destaque') {
+    // Se não houver conteúdo
+    if(!data || !data.items || data.items.length === 0){
+      if(feedKey === 'destaque'){
+        // Limpa o container do destaque
         container.innerHTML = '';
       }
-      return; // mantém conteúdo dos outros
+      return; // mantém o conteúdo antigo nos outros feeds
     }
 
-    // Se veio, atualiza normalmente
+    // Se houver conteúdo, renderiza normalmente
     container.innerHTML = '';
     const items = data.items.slice(0,max);
     items.forEach(it =>{
@@ -946,9 +948,10 @@ async function loadCards(feedKey, containerId, max=4){
       container.appendChild(div);
     });
   }catch(e){
-    console.warn(e);
+    console.warn(e); // mantém conteúdo
   }
 }
+
 
 
 
