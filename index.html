@@ -616,31 +616,42 @@ white-space: nowrap;
     */
       
 
-      async function fetchJson(rssUrl) {
-  // Primeiro tenta rss2json.com
-  try {
-    let url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('rss2json fail');
-    const data = await res.json();
-    return data; // já tem data.items
-  } catch (e) {
-    console.warn('rss2json falhou, tentando feedrapp...');
-    // Se falhar, tenta feedrapp.info
+      let ultimoTituloPorFeed = {};
+
+async function fetchJson(rssUrl) {
+  const apis = [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`,
+    `https://feedrapp.info/api/v1/rss?rss_url=${encodeURIComponent(rssUrl)}`
+  ];
+
+  for (let apiUrl of apis) {
     try {
-      let url = `https://feedrapp.info/api/v1/rss?rss_url=${encodeURIComponent(rssUrl)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('feedrapp fail');
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error(`Falha na API: ${apiUrl}`);
       const data = await res.json();
-      return {
-        items: data.entries || [], // feedrapp usa entries
-      };
+
+      // Normaliza o formato para { items: [...] }
+      const items = data.items || data.entries || [];
+      if (items.length > 0) {
+        // Só retorna se tiver notícia nova
+        const tituloNovo = items[0].title;
+        if (ultimoTituloPorFeed[rssUrl] !== tituloNovo) {
+          ultimoTituloPorFeed[rssUrl] = tituloNovo;
+          return { items };
+        } else {
+          console.log(`Sem novidades para ${rssUrl}`);
+          return { items: [] };
+        }
+      }
     } catch (err) {
-      console.error('Ambos os serviços falharam:', err);
-      return { items: [] }; // fallback vazio
+      console.warn(`Erro ao tentar ${apiUrl}`, err);
     }
   }
+
+  // Se nenhuma API responder
+  return { items: [] };
 }
+
 
       
 
