@@ -765,6 +765,9 @@ const FEEDS = {
   destaque: 'https://maisrogmacedo.wordpress.com/tag/destaque/feed',
 };
 
+
+
+   /*     
 let ultimoTituloPorFeed = {};
 
 async function fetchJson(rssUrl) {
@@ -799,6 +802,58 @@ async function fetchJson(rssUrl) {
   return null; // mantém conteúdo se nenhuma API respondeu
 }
 
+*/ 
+
+let ultimoTituloPorFeed = {};
+let ultimoConteudoPorFeed = {};
+let ultimaDataPorFeed = {};
+
+async function fetchJson(rssUrl) {
+  const apis = [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`,
+    `https://feedrapp.info/api/v1/rss?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`
+  ];
+
+  for (let apiUrl of apis) {
+    try {
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error(`Falha na API: ${apiUrl}`);
+      const data = await res.json();
+
+      // Normaliza o formato
+      const items = data.items || data.entries || [];
+      if (items.length > 0) {
+        const tituloNovo = items[0].title;
+        const dataNova = items[0].pubDate || items[0].published || null;
+
+        // Checa se mudou título ou data
+        const mudouTitulo = ultimoTituloPorFeed[rssUrl] !== tituloNovo;
+        const mudouData = ultimaDataPorFeed[rssUrl] !== dataNova;
+
+        if (mudouTitulo || mudouData) {
+          ultimoTituloPorFeed[rssUrl] = tituloNovo;
+          ultimaDataPorFeed[rssUrl] = dataNova;
+          ultimoConteudoPorFeed[rssUrl] = { items }; // salva novo conteúdo
+          return { items };
+        } else {
+          console.log(`Sem novidades para ${rssUrl}`);
+          return ultimoConteudoPorFeed[rssUrl] || null; // retorna conteúdo antigo
+        }
+      }
+    } catch (err) {
+      console.warn(`Erro ao tentar ${apiUrl}`, err);
+    }
+  }
+
+  // Nenhuma API respondeu → retorna conteúdo antigo se tiver
+  return ultimoConteudoPorFeed[rssUrl] || null;
+}
+
+
+        
+
+
+        
 /* Funções de carregamento */
 async function loadManchete(){
   const container = document.getElementById('manchete');
