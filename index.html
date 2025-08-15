@@ -121,19 +121,20 @@
 </script>
   -->
 
+  
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
   const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
   let initialReloads = 0; // contador de recargas iniciais
 
-  function loadIframe(forceTarget = true) {
+  function loadIframe() {
     // Mostra loading e esconde iframe
     loading.style.display = 'flex';
     iframe.style.display = 'none';
 
-    // Define o src: se forceTarget=true, vai pro targetURL, senão recarrega o atual
-    iframe.src = forceTarget ? targetURL : iframe.src;
+    // Força ignorar cache adicionando timestamp
+    iframe.src = targetURL + "?t=" + new Date().getTime();
 
     iframe.onload = () => {
       // Mostra iframe e esconde loading
@@ -141,25 +142,22 @@
       iframe.style.display = 'block';
 
       // Recarga inicial extra (2 vezes no total)
-      if (forceTarget && initialReloads < 1) {
+      if(initialReloads < 1){
         initialReloads++;
         console.log("Recarga inicial extra:", initialReloads);
-        setTimeout(() => loadIframe(true), 2000);
+        setTimeout(() => loadIframe(), 2000);
       }
     };
 
     iframe.onerror = () => {
       console.error("Erro ao carregar a página, tentando novamente...");
-      setTimeout(() => loadIframe(forceTarget), 3000); // tenta recarregar após 3s
+      setTimeout(loadIframe, 3000); // tenta recarregar após 3s
     };
   }
 
-  // Primeira carga
-  loadIframe(true);
-
-  // Recarregar automaticamente a cada 3 minutos, mantendo onde o usuário estava
-  setInterval(() => loadIframe(false), 180000);
+  loadIframe();
 </script>
+
 
 
   
