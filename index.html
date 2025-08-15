@@ -82,6 +82,8 @@
 
 <iframe id="iframeContainer" src=""></iframe>
 
+
+  <!--
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
@@ -117,6 +119,58 @@
 
   
 </script>
+  -->
+
+<script>
+  const iframe = document.getElementById('iframeContainer');
+  const loading = document.getElementById('loadingOverlay');
+  const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
+  let initialReloads = 0; // contador de recargas iniciais
+
+  function loadIframe(forceReload = false) {
+    // Se não for recarga forçada, e o usuário saiu do targetURL, não recarrega
+    try {
+      const currentURL = iframe.contentWindow.location.href;
+      if (!forceReload && currentURL !== targetURL) {
+        console.log("Usuário está em outra página, não recarregando...");
+        return;
+      }
+    } catch (e) {
+      // Pode dar erro de CORS ao tentar acessar location.href, então ignoramos
+      console.warn("Não foi possível verificar URL atual do iframe");
+    }
+
+    // Mostra loading e esconde iframe
+    loading.style.display = 'flex';
+    iframe.style.display = 'none';
+    iframe.src = targetURL;
+
+    iframe.onload = () => {
+      // Mostra iframe e esconde loading
+      loading.style.display = 'none';
+      iframe.style.display = 'block';
+
+      // Recarga inicial extra (2 vezes no total)
+      if(initialReloads < 1){
+        initialReloads++;
+        console.log("Recarga inicial extra:", initialReloads);
+        setTimeout(() => loadIframe(true), 2000); // força recarga inicial
+      }
+    };
+
+    iframe.onerror = () => {
+      console.error("Erro ao carregar a página, tentando novamente...");
+      setTimeout(() => loadIframe(true), 3000); // força recarregar após 3s
+    };
+  }
+
+  loadIframe(true);
+
+  // Recarregar automaticamente a cada  minutos (só se ainda estiver no targetURL)
+  setInterval(() => loadIframe(false), 180000);
+</script>
+
+  
 
 </body>
 </html>
