@@ -5,7 +5,7 @@
   const container = document.createElement("div");
   container.id = "barra-maisrog";
   container.innerHTML = `
-    <a href="https://www.maisrogmacedo.wordpress.com" class="mr-link">+Rogmacedo</a>
+    <a href="https://maisrogmacedo.wordpress.com" class="mr-link" target="_blank" rel="noopener noreferrer">+Rogmacedo</a>
   `;
 
   const style = document.createElement("style");
