@@ -11,7 +11,7 @@
   const style = document.createElement("style");
   style.textContent = `
     #barra-maisrog {
-      background: #dbdbdb;
+      background: #f2f2f2;
       display: flex;
       justify-content: center;
       align-items: center;
