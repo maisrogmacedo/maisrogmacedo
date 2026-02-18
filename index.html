@@ -73,24 +73,13 @@
   }
 
 
-/* Barra estilo YouTube */
-#topLoader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: #ff0000;
-  z-index: 20000;
-  transition: width 0.3s ease;
-}
+
 
   
 </style>
 </head>
 <body>
 
-  <div id="topLoader"></div>
 
 
 <div id="loadingOverlay">
@@ -139,7 +128,7 @@
 </script>
   -->
 
- <!-- cod alternat 02 
+ 
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
@@ -167,69 +156,6 @@
 
   loadIframe();
 </script>
--->
-
-  <script>
-  const iframe = document.getElementById('iframeContainer');
-  const loading = document.getElementById('loadingOverlay');
-  const topLoader = document.getElementById('topLoader');
-  const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
-
-  let progressInterval;
-
-  function startTopLoader() {
-    topLoader.style.width = "0%";
-    topLoader.style.display = "block";
-
-    let progress = 0;
-
-    progressInterval = setInterval(() => {
-      if (progress < 90) {
-        progress += Math.random() * 10;
-        topLoader.style.width = progress + "%";
-      }
-    }, 200);
-  }
-
-  function finishTopLoader() {
-    clearInterval(progressInterval);
-    topLoader.style.width = "100%";
-
-    setTimeout(() => {
-      topLoader.style.display = "none";
-      topLoader.style.width = "0%";
-    }, 300);
-  }
-
-  function loadIframe() {
-    loading.style.display = 'flex';
-    iframe.style.display = 'none';
-
-    iframe.src = targetURL + "?t=" + new Date().getTime();
-
-    iframe.onload = () => {
-      loading.style.display = 'none';
-      iframe.style.display = 'block';
-      finishTopLoader();
-    };
-
-    startTopLoader();
-  }
-
-  // Sempre que o iframe começar nova navegação
-  iframe.addEventListener("load", finishTopLoader);
-
-  // Observa mudança no atributo src
-  const observer = new MutationObserver(() => {
-    startTopLoader();
-  });
-
-  observer.observe(iframe, { attributes: true, attributeFilter: ['src'] });
-
-  loadIframe();
-</script>
-
-
 
 
 
