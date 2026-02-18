@@ -151,12 +151,10 @@
 </script>
 -->
 
-  <script>
+<script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
   const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
-
-  let currentURL = "";
 
   function showLoading() {
     loading.style.display = 'flex';
@@ -173,25 +171,19 @@
     iframe.src = targetURL + "?t=" + new Date().getTime();
   }
 
+  // Sempre que QUALQUER página dentro do iframe carregar
   iframe.addEventListener("load", () => {
     hideLoading();
   });
 
-  // Fica verificando se a URL mudou
-  setInterval(() => {
-    try {
-      const newURL = iframe.contentWindow.location.href;
-      if (newURL !== currentURL) {
-        currentURL = newURL;
-        showLoading();
-      }
-    } catch (e) {
-      // erro esperado por ser domínio externo
-    }
-  }, 500);
+  // Detecta início de nova navegação no iframe
+  iframe.addEventListener("beforeunload", () => {
+    showLoading();
+  });
 
   loadIframe();
 </script>
+
 
 
 
