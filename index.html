@@ -71,9 +71,27 @@
     .loader { width:36px; height:36px; border-width:4px; }
     .loading-text { font-size:16px; }
   }
+
+
+/* Barra estilo YouTube */
+#topLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: #ff0000;
+  z-index: 20000;
+  transition: width 0.3s ease;
+}
+
+  
 </style>
 </head>
 <body>
+
+  <div id="topLoader"></div>
+
 
 <div id="loadingOverlay">
   <div class="loader"></div>
@@ -121,7 +139,7 @@
 </script>
   -->
 
-<!-- cod alternativo 02  
+ <!-- cod alternat 02 
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
@@ -151,38 +169,66 @@
 </script>
 -->
 
-<script>
+  <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
+  const topLoader = document.getElementById('topLoader');
   const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
 
-  function showLoading() {
-    loading.style.display = 'flex';
-    iframe.style.display = 'none';
+  let progressInterval;
+
+  function startTopLoader() {
+    topLoader.style.width = "0%";
+    topLoader.style.display = "block";
+
+    let progress = 0;
+
+    progressInterval = setInterval(() => {
+      if (progress < 90) {
+        progress += Math.random() * 10;
+        topLoader.style.width = progress + "%";
+      }
+    }, 200);
   }
 
-  function hideLoading() {
-    loading.style.display = 'none';
-    iframe.style.display = 'block';
+  function finishTopLoader() {
+    clearInterval(progressInterval);
+    topLoader.style.width = "100%";
+
+    setTimeout(() => {
+      topLoader.style.display = "none";
+      topLoader.style.width = "0%";
+    }, 300);
   }
 
   function loadIframe() {
-    showLoading();
+    loading.style.display = 'flex';
+    iframe.style.display = 'none';
+
     iframe.src = targetURL + "?t=" + new Date().getTime();
+
+    iframe.onload = () => {
+      loading.style.display = 'none';
+      iframe.style.display = 'block';
+      finishTopLoader();
+    };
+
+    startTopLoader();
   }
 
-  // Sempre que QUALQUER página dentro do iframe carregar
-  iframe.addEventListener("load", () => {
-    hideLoading();
+  // Sempre que o iframe começar nova navegação
+  iframe.addEventListener("load", finishTopLoader);
+
+  // Observa mudança no atributo src
+  const observer = new MutationObserver(() => {
+    startTopLoader();
   });
 
-  // Detecta início de nova navegação no iframe
-  iframe.addEventListener("beforeunload", () => {
-    showLoading();
-  });
+  observer.observe(iframe, { attributes: true, attributeFilter: ['src'] });
 
   loadIframe();
 </script>
+
 
 
 
