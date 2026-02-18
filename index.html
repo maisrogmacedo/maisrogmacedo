@@ -83,7 +83,7 @@
 <iframe id="iframeContainer" src=""></iframe>
 
 
-  <!-- código alternativo 
+  <!-- código alternativo 01  
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
@@ -121,7 +121,7 @@
 </script>
   -->
 
-  
+<!-- cod alternativo 02  
 <script>
   const iframe = document.getElementById('iframeContainer');
   const loading = document.getElementById('loadingOverlay');
@@ -146,6 +146,52 @@
       setTimeout(loadIframe, 3000); // tenta recarregar após 3s
     };
   }
+
+  loadIframe();
+</script>
+-->
+
+  <script>
+  const iframe = document.getElementById('iframeContainer');
+  const loading = document.getElementById('loadingOverlay');
+  const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
+
+  function showLoading() {
+    loading.style.display = 'flex';
+    iframe.style.display = 'none';
+  }
+
+  function hideLoading() {
+    loading.style.display = 'none';
+    iframe.style.display = 'block';
+  }
+
+  function loadIframe() {
+    showLoading();
+
+    iframe.src = targetURL + "?t=" + new Date().getTime();
+  }
+
+  // Sempre que o iframe terminar de carregar qualquer página
+  iframe.addEventListener("load", () => {
+    hideLoading();
+
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      // Captura todos os links dentro do iframe
+      const links = iframeDoc.querySelectorAll("a");
+
+      links.forEach(link => {
+        link.addEventListener("click", () => {
+          showLoading();
+        });
+      });
+
+    } catch (e) {
+      console.warn("Não foi possível acessar o conteúdo do iframe.");
+    }
+  });
 
   loadIframe();
 </script>
