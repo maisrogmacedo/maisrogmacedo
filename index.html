@@ -156,6 +156,8 @@
   const loading = document.getElementById('loadingOverlay');
   const targetURL = "https://maisrogmacedo.wordpress.com/inicio/";
 
+  let currentURL = "";
+
   function showLoading() {
     loading.style.display = 'flex';
     iframe.style.display = 'none';
@@ -168,33 +170,29 @@
 
   function loadIframe() {
     showLoading();
-
     iframe.src = targetURL + "?t=" + new Date().getTime();
   }
 
-  // Sempre que o iframe terminar de carregar qualquer página
   iframe.addEventListener("load", () => {
     hideLoading();
-
-    try {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-      // Captura todos os links dentro do iframe
-      const links = iframeDoc.querySelectorAll("a");
-
-      links.forEach(link => {
-        link.addEventListener("click", () => {
-          showLoading();
-        });
-      });
-
-    } catch (e) {
-      console.warn("Não foi possível acessar o conteúdo do iframe.");
-    }
   });
+
+  // Fica verificando se a URL mudou
+  setInterval(() => {
+    try {
+      const newURL = iframe.contentWindow.location.href;
+      if (newURL !== currentURL) {
+        currentURL = newURL;
+        showLoading();
+      }
+    } catch (e) {
+      // erro esperado por ser domínio externo
+    }
+  }, 500);
 
   loadIframe();
 </script>
+
 
 
 </body>
